@@ -13,28 +13,44 @@ end
 
 #takes the average of the students
 def show_non_attendance
-non_attendance = File.open('students.csv', 'r').readlines
+  non_attendance = File.open('students.csv', 'r').readlines
   non_attendance.map do |note|
     new_lines_stud = note.split(', ').map(&:chomp)
 
     name = new_lines_stud.shift
     assistance = new_lines_stud.select.count { |ele| ele == 'A' }
     
-      puts "El Estudiante #{name} tuvo #{assistance} inasistencia." if assistance > 0
+    puts "El Estudiante #{name} tuvo #{assistance} inasistencia." if assistance > 0
     
   end
 end
 
 def show_approved_students
   file = File.open('students.csv','r').readlines
-  new_lines_stud = []
-  file.each { |line| new_lines_stud.push(line.split(', ').map(&:chomp)) }
 
-  new_lines_stud.each do |notes|
-    name = notes.shift
-    approved = get_sum_pro(notes) 
+puts "Agregue la nota minima de aprobación (coloque enter si la nota es 5) "
+input = gets.chomp 
+
+if input == ""      
+  puts "La nota minima de aprobación es 5" 
+else     
+  puts "La nota minima de aprobación es " + input 
+end
+
+new_lines_stud = []
+file.each { |line| new_lines_stud.push(line.split(', ').map(&:chomp)) }
+
+new_lines_stud.each do |notes|
+  name = notes.shift
+  approved = get_sum_pro(notes) 
+
+  if input == ""      
     puts "El Estudiante #{name} Aprobo con un promedio de #{approved}" if approved >= 5
+  else     
+    puts "El Estudiante #{name} Aprobo con un promedio de #{approved}" if approved >= input.to_f
   end
+
+end
 end
 
 def get_sum_pro(notes)
